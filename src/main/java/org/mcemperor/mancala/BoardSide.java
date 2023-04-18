@@ -13,7 +13,7 @@ public class BoardSide {
     private final Tile mancala = new Tile(0);
 
     public BoardSide(int numberOfNormalTiles, int gems) {
-        this.tiles = Stream.generate(() -> new Tile(gems))
+        tiles = Stream.generate(() -> new Tile(gems))
             .limit(numberOfNormalTiles)
             .toList();
     }
@@ -30,29 +30,45 @@ public class BoardSide {
      */
     public DistributionResult distributeGems(int amount, int startIndex, boolean includeMancalaTile) {
         int amountToDistribute = Math.min(amount, tiles.size() - startIndex);
+        int lastTileIndex = tiles.size();
+        int gemsDistributedAtLastTile = 0;
         for (int i = 0; i < amountToDistribute; i++) {
-            this.tiles.get(i + startIndex).addGems(1);
+            lastTileIndex = i + startIndex;
+            tiles.get(lastTileIndex).addGems(1);
+            gemsDistributedAtLastTile = 1;
         }
 
         // Check whether there are gems to add to the Mancala tile
-        boolean lastTileWasMancala = false;
         if (includeMancalaTile && amount > amountToDistribute) {
-            this.mancala.addGems(1);
+            mancala.addGems(1);
             amountToDistribute++;
-            lastTileWasMancala = true;
+            lastTileIndex = -1;
+            gemsDistributedAtLastTile = 1;
         }
-        return new DistributionResult(amountToDistribute, lastTileWasMancala);
+        return new DistributionResult(amountToDistribute, -1, lastTileIndex, gemsDistributedAtLastTile);
+    }
+
+    public Tile getMancala() {
+        return mancala;
+    }
+
+    public Tile getTile(int index) {
+        if (!(-1 <= index && index < tiles.size())) {
+            throw new IllegalArgumentException("Index should be >= -1 and < number of normal tiles");
+        }
+        return (index == -1 ? mancala : tiles.get(index));
     }
 
     public int peekGems(int index) {
-        return tiles.get(index).getGems();
+        return getTile(index).getGems();
     }
 
     public int peekGemsAtMancala() {
         return mancala.getGems();
     }
 
-    public int removeGems(int index) {
-        return tiles.get(index).removeAllGems();
+    public int removeAllGems(int index) {
+        return getTile(index)
+            .removeAllGems();
     }
 }

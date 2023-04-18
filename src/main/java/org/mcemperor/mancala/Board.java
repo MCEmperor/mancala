@@ -1,30 +1,13 @@
 package org.mcemperor.mancala;
 
 import java.util.List;
-import java.util.stream.Stream;
 
-public class Board {
+public interface Board {
 
-    private final int tilesPerPlayer;
+    BoardSide getSide(int index);
 
-    private final List<BoardSide> sides;
+    int getTilesPerPlayer();
 
-    public Board(int tilesPerPlayer, int startGems) {
-        this.tilesPerPlayer = tilesPerPlayer;
-        this.sides = Stream.generate(() -> new BoardSide(tilesPerPlayer, startGems))
-            .limit(2)
-            .toList();
-    }
+    int getNumberOfSides();
 
-    public BoardSide getSide(int player) {
-        return sides.get(player);
-    }
-
-    public int tilesPerPlayer() {
-        return tilesPerPlayer;
-    }
-
-    public int sides() {
-        return sides.size();
-    }
 }

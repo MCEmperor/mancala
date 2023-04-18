@@ -1,5 +1,6 @@
 package org.mcemperor.mancala;
 
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 @ToString
