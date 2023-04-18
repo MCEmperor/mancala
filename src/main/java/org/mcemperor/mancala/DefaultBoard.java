@@ -41,7 +41,7 @@ public class DefaultBoard implements Board {
             var anotherResult = sides.get(currBoardSide).distributeGems(gemsLeft, currTile, currBoardSide == boardSideIndex);
             result = DistributionResult.merge(result, anotherResult)
                 .withLastTileBoardSideIndex(currBoardSide);
-            gemsLeft -= result.gemsDistributed();
+            gemsLeft -= anotherResult.gemsDistributed();
             currBoardSide = (currBoardSide + 1) % sides.size();
             currTile = 0;
         }

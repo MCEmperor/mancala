@@ -1,5 +1,6 @@
 package org.mcemperor.mancala;
 
+import java.util.List;
 import java.util.stream.IntStream;
 
 public class Game {
@@ -12,8 +13,8 @@ public class Game {
 
     private final OppositeTileStrategy oppositeTileStrategy;
 
-    public Game() {
-        this.board = new DefaultBoard(2, 6, 4);
+    public Game(DefaultBoard board) {
+        this.board = board;
         this.oppositeTileStrategy = new DefaultOppositeTileStrategy();
     }
 
@@ -29,7 +30,7 @@ public class Game {
             throw new IllegalArgumentException("player != playerTurn");
         }
         if (isOver) {
-            throw new IllegalArgumentException("game is over");
+            throw new IllegalStateException("game is over");
         }
 
         int boardSideIndex = playerTurn;
@@ -53,7 +54,29 @@ public class Game {
             }
         }
 
-        isOver = determineGameOver();
+        if (determineGameOver()) {
+            // Process remaining gems
+            int playerWithRemainingGems = (playerTurn + 1) % board.getNumberOfSides();
+            for (int i = 0; i < board.getTilesPerPlayer(); i++) {
+                var boardSide = board.getSide(playerWithRemainingGems);
+                int remainingGems = boardSide.getTile(i).removeAllGems();
+                boardSide.getMancala().addGems(remainingGems);
+            }
+
+            isOver = true;
+        }
+    }
+
+    public GameStatistics summaryStatistics() {
+        if (!isOver) {
+            throw new IllegalStateException("Game is not over - yet");
+        }
+
+        List<Integer> pointsPerPlayer = IntStream.range(0, board.getNumberOfSides())
+            .map(i -> board.getSide(i).getMancala().getGems())
+            .boxed()
+            .toList();
+        return new GameStatistics(pointsPerPlayer);
     }
 
     /**
