@@ -23,7 +23,6 @@ public class Game {
      *
      * @param player The player performing the action.
      * @param tileIndex The index of the tile to empty.
-     * @return The distribution results.
      */
     public void pick(int player, int tileIndex) {
         if (player != playerTurn) {
