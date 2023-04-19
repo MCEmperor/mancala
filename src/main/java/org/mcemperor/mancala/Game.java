@@ -40,7 +40,7 @@ public class Game {
         // If the last tile was empty and belongs to the player on turn, then the player may steal all the gems of the
         // opposite tile on the other board side.
         if (result != null) {
-            if (result.lastTileIndex() != -1 && result.lastTileBoardSideIndex() == boardSideIndex && result.gemsDistributedAtLastTile() == board.getSide(boardSideIndex).peekGems(result.lastTileIndex())) {
+            if (result.lastTileIndex() != -1 && result.lastTileBoardSideIndex() == boardSideIndex && result.gemsDistributedAtLastTile() == board.getSide(boardSideIndex).peekGems(result.lastTileIndex()) && oppositeGemsAvailable(boardSideIndex, result.lastTileIndex())) {
                 stealFromOppositePlayers(result.lastTileBoardSideIndex(), result.lastTileIndex());
                 // Also, you may capture the last distributed gem on your own side
                 var boardSide = board.getSide(player);
@@ -65,6 +65,13 @@ public class Game {
 
             isOver = true;
         }
+    }
+
+    private boolean oppositeGemsAvailable(int boardSideIndex, int tileIndex) {
+        int gemsAvailable = oppositeTileStrategy.getOppositeTiles(board, boardSideIndex, tileIndex).stream()
+            .mapToInt(Tile::getGems)
+            .sum();
+        return (gemsAvailable > 0);
     }
 
     public GameStatistics summaryStatistics() {

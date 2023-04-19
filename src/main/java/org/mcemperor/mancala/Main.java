@@ -8,7 +8,7 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        var game = new Game(new DefaultBoard(2, 6, 1));
+        var game = new Game(new DefaultBoard(2, 6, 4));
         System.out.println(drawBoard(game.getBoard()));
 
         while (!game.isOver()) {

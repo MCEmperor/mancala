@@ -13,7 +13,7 @@ public class DefaultBoard implements Board {
      * Constructs a board with the given number of players, tiles per player, gems to start with on each tile, and a
      * strategy to determine which tile is the opposite tile of another one.
      *
-     * @param numberOfSides The number of players to.
+     * @param numberOfSides The number of sides of the board. Each player has one side.
      * @param tilesPerSide The number of tiles per side.
      * @param startGems The number of start gems for each tile.
      */
