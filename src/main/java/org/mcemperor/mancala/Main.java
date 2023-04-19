@@ -8,8 +8,20 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        var game = new Game(new DefaultBoard(2, 6, 4));
+        System.out.println("Welcome to Mancala!");
+        System.out.println();
+        System.out.print("Select the number of gems on each tile: ");
+        int gems = scanner.nextInt();
+
+        var game = new Game(new DefaultBoard(2, 6, gems));
+        System.out.println("This is the board.");
         System.out.println(drawBoard(game.getBoard()));
+
+        System.out.println("To select a move, select the tile index (ranging from 0 to 5).");
+        System.out.println("For the bottom row, 0 is the index of the leftmost tile,");
+        System.out.println("for the top row, 0 is the index of the rightmost tile.");
+        System.out.println("Player 1 may begin.");
+        System.out.println();
 
         while (!game.isOver()) {
             int player = game.getPlayerTurn();
